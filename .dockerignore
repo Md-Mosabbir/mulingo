@@ -1,0 +1,25 @@
+node_modules
+npm-debug.log
+backend/node_modules
+frontend/node_modules
+
+# Build outputs
+backend/dist
+frontend/dist
+frontend/build
+.next
+
+# Git
+.git
+.gitignore
+
+# Environment variables
+.env
+.env.test
+.env.production
+.env.local
+
+# IDEs and other ignored files
+.vscode
+.idea
+.DS_Store

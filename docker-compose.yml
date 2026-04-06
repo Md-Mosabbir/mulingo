@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------
+  # MySQL Database Service (Shared)
+  # ----------------------------------------
+  database:
+    image: mysql:8.0
+    container_name: mulingo_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mulingodb
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # ----------------------------------------
+  # Backend API Service (Development Mode)
+  # ----------------------------------------
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      target: development
+    container_name: mulingo_backend_dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DB_HOST=database
+      - DB_PORT=3306
+      - DB_USER=dbuser
+      - DB_PASSWORD=dbpassword
+      - DB_NAME=mulingodb
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      # Mount the local source code into the container so nodemon can hot-reload!
+      # We only mount src to avoid overwriting node_modules inside the container mapping.
+      - ./backend/src:/app/backend/src
+      - ./backend/package.json:/app/backend/package.json
+      - ./backend/tsconfig.json:/app/backend/tsconfig.json
+
+volumes:
+  mysql_data:

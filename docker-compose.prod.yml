@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  # The database service inherits from docker-compose.yml
+  database:
+    # In production, you might want to map different ports or use a managed database.
+    # We will keep the default settings here, but you can override them.
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      # Target the production stage instead of development
+      target: production
+    container_name: mulingo_backend_prod
+    environment:
+      - NODE_ENV=production
+    # Overwrite the volumes to empty so we DON'T mount local files in production
+    volumes: []
