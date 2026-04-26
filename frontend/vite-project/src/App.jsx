@@ -41,6 +41,8 @@ function App() {
   return (
     <div className="min-h-screen bg-[#eef3ef] pb-6">
       <TopOptionBar />
+      
+     
 
       <main className="grid grid-cols-1 gap-4 w-full md:grid-cols-2">
         <ConversationList
