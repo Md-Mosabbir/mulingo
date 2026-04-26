@@ -39,12 +39,12 @@ function App() {
   );
 
   return (
-    <div className="min-h-screen bg-[#eef3ef] pb-6">
+    <div className="flex flex-col h-screen overflow-hidden bg-[#0B1120] pb-2 text-white">
       <TopOptionBar />
-      
-     
 
-      <main className="grid grid-cols-1 gap-4 w-full md:grid-cols-2">
+
+
+      <main className="flex-1 min-h-0 grid grid-cols-1 gap-2 w-full px-2 md:grid-cols-[1fr_3fr] mt-2">
         <ConversationList
           conversations={conversations}
           activeId={activeConversationId}

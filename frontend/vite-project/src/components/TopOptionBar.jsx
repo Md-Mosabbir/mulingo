@@ -12,7 +12,7 @@ function TopOptionBar() {
     <header className="flex items-center justify-between py-2 px-1 bg-[#111827] ">
       <button
         type="button"
-        className="flex h-11 w-11 items-center justify-center rounded-full bg-purple-200 text-lg text-white"
+        className="flex h-11 w-11 items-center justify-center rounded-full bg-[#7b61ff] text-lg text-white"
         aria-label="Mulingo"
       >
         <img src="/favicon.svg" alt="Mulingo logo" className="h-7 w-7 object-contain" />
@@ -25,7 +25,7 @@ function TopOptionBar() {
             type="button"
             className={`flex h-10 w-10 items-center justify-center rounded-full text-sm transition ${
               action.active
-                ? "bg-[#7C3AED] text-white"
+                ? "bg-[#7b61ff] text-white"
                 : "bg-[#1D153D] text-[#D1D5DB] hover:bg-[#2a1f57]"
             }`}
             aria-label={action.id}

@@ -4,7 +4,7 @@ import MessageComposer from "./MessageComposer";
 
 function ChatPanel({ activeConversation, messages }) {
   return (
-    <section className="flex min-h-[36rem] flex-col rounded-2xl border border-[#d5dde7] bg-[#f3f6f4]">
+    <section className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#1F2937] bg-[#111926]">
       <ChatHeader name={activeConversation?.name ?? "Conversation"} />
       <div className="flex-1 overflow-y-auto px-4 py-4 md:px-6">
         {messages.map((message) => (

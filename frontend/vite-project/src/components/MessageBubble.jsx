@@ -8,7 +8,7 @@ function MessageBubble({ message }) {
       <div className={`${isUser ? "max-w-md" : "max-w-2xl"}`}>
         <div
           className={`rounded-2xl px-4 py-3 text-sm ${
-            isUser ? "bg-white text-[#111827]" : "bg-[#111827] text-white"
+            isUser ? "bg-[#7b61ff] text-white" : "bg-[#1F2937] text-white"
           }`}
         >
           {message.type === "property" ? (

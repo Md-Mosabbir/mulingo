@@ -6,16 +6,16 @@ function statusAccent(status) {
 
 function ConversationList({ conversations, activeId, onSelect }) {
   return (
-    <section className="flex min-h-[36rem] flex-col rounded-2xl border border-[#d5dde7] bg-white">
-      <div className="border-b border-[#eef2f7] p-4">
+    <section className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#1F2937] bg-[#111926]">
+      <div className="border-b border-[#1F2937] p-4">
         <input
           type="text"
           placeholder="Search"
-          className="w-full rounded-xl border border-[#e5e7eb] bg-[#f8fafc] px-3 py-2 text-sm outline-none focus:border-[#7C3AED]"
+          className="w-full rounded-xl border border-[#374151] bg-[#1F2937] px-3 py-2 text-sm text-white outline-none focus:border-[#7b61ff] placeholder:text-[#9CA3AF]"
         />
       </div>
-      <div className="border-b border-[#eef2f7] px-4 py-3">
-        <h2 className="text-lg font-semibold text-[#111827]">Messages</h2>
+      <div className="border-b border-[#1F2937] px-4 py-3">
+        <h2 className="text-lg font-semibold text-white">Messages</h2>
       </div>
 
       <div className="flex-1 overflow-y-auto p-2">
@@ -25,7 +25,7 @@ function ConversationList({ conversations, activeId, onSelect }) {
             type="button"
             onClick={() => onSelect(conversation.id)}
             className={`mb-1 flex w-full items-start gap-3 rounded-xl px-3 py-3 text-left transition ${
-              activeId === conversation.id ? "bg-[#f5f3ff]" : "hover:bg-[#f8fafc]"
+              activeId === conversation.id ? "bg-[#1F2937]" : "hover:bg-[#1F2937]"
             }`}
           >
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#1D153D] text-xs text-white">
@@ -33,7 +33,7 @@ function ConversationList({ conversations, activeId, onSelect }) {
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-3">
-                <p className="truncate text-sm font-medium text-[#111827]">{conversation.name}</p>
+                <p className="truncate text-sm font-medium text-gray-200">{conversation.name}</p>
                 <span className="shrink-0 text-xs text-[#9ca3af]">{conversation.time}</span>
               </div>
               <p className={`truncate text-xs ${statusAccent(conversation.status)}`}>
