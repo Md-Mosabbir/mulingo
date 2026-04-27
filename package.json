@@ -8,12 +8,19 @@
     "backend"
   ],
   "scripts": {
-    "start": "npm run start --workspace=backend",
-    "dev": "npm run dev --workspace=backend",
-    "build": "npm run build --workspaces",
-    "test": "npm run test --workspaces"
+    "//": "Maintenance",
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev": "concurrently \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "clean": "rm -rf node_modules && npm run clean --workspaces --if-present"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
 }
