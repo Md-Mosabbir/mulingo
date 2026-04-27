@@ -7,6 +7,11 @@ const conversations = [
     time: "4:45 pm",
     status: "online",
     avatar: "JD",
+    sharedItems: [
+      { id: "s1", type: "image", name: "living-room-shot.png" },
+      { id: "s2", type: "video", name: "walkthrough-tour.mp4" },
+      { id: "s3", type: "file", name: "property-specs.pdf" },
+    ],
   },
   {
     id: "c2",
@@ -16,6 +21,7 @@ const conversations = [
     time: "5:38 pm",
     status: "typing",
     avatar: "TB",
+    sharedItems: [{ id: "s4", type: "file", name: "booking-terms.docx" }],
   },
   {
     id: "c3",
@@ -25,6 +31,7 @@ const conversations = [
     time: "5:04 pm",
     status: "seen",
     avatar: "KR",
+    sharedItems: [],
   },
   {
     id: "c4",
@@ -34,6 +41,7 @@ const conversations = [
     time: "4:22 pm",
     status: "unread",
     avatar: "RP",
+    sharedItems: [{ id: "s5", type: "video", name: "promo-clip.mov" }],
   },
   {
     id: "c5",
@@ -43,6 +51,7 @@ const conversations = [
     time: "3:59 pm",
     status: "seen",
     avatar: "EJ",
+    sharedItems: [{ id: "s6", type: "image", name: "kitchen-remodel.jpg" }],
   },
   {
     id: "c6",
@@ -52,6 +61,7 @@ const conversations = [
     time: "3:24 pm",
     status: "seen",
     avatar: "SB",
+    sharedItems: [],
   },
 ];
 

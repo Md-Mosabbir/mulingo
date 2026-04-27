@@ -10,13 +10,7 @@ const actions = [
 function TopOptionBar() {
   return (
     <header className="flex items-center justify-between py-2 px-1 bg-[#111827] ">
-      <button
-        type="button"
-        className="flex h-11 w-11 items-center justify-center rounded-full bg-[#7b61ff] text-lg text-white"
-        aria-label="Mulingo"
-      >
-        <img src="/favicon.svg" alt="Mulingo logo" className="h-7 w-7 object-contain" />
-      </button>
+      <p className="font-pacifico px-2 text-[32px] text-white">Mulingo</p>
 
       <nav className="flex items-center gap-2">
         {actions.map((action) => (

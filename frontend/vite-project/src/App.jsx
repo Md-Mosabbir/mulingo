@@ -9,6 +9,7 @@ function App() {
   const [conversations, setConversations] = useState([]);
   const [activeConversationId, setActiveConversationId] = useState("");
   const [messages, setMessages] = useState([]);
+  const [nicknamesByConversation, setNicknamesByConversation] = useState({});
 
   useEffect(() => {
     async function loadConversations() {
@@ -34,9 +35,39 @@ function App() {
   }, [activeConversationId]);
 
   const activeConversation = useMemo(
-    () => conversations.find((conversation) => conversation.id === activeConversationId),
-    [conversations, activeConversationId],
+    () =>
+      conversations
+        .map((conversation) => {
+          const nickname = nicknamesByConversation[conversation.id]?.trim();
+          return {
+            ...conversation,
+            displayName: nickname || conversation.name,
+            nickname: nickname || "",
+          };
+        })
+        .find((conversation) => conversation.id === activeConversationId),
+    [conversations, activeConversationId, nicknamesByConversation],
   );
+
+  const displayConversations = useMemo(
+    () =>
+      conversations.map((conversation) => {
+        const nickname = nicknamesByConversation[conversation.id]?.trim();
+        return {
+          ...conversation,
+          displayName: nickname || conversation.name,
+          nickname: nickname || "",
+        };
+      }),
+    [conversations, nicknamesByConversation],
+  );
+
+  function handleNicknameChange(conversationId, nickname) {
+    setNicknamesByConversation((prev) => ({
+      ...prev,
+      [conversationId]: nickname,
+    }));
+  }
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-[#0B1120] pb-2 text-white">
@@ -46,11 +77,15 @@ function App() {
 
       <main className="flex-1 min-h-0 grid grid-cols-1 gap-2 w-full px-2 md:grid-cols-[1fr_3fr] mt-2">
         <ConversationList
-          conversations={conversations}
+          conversations={displayConversations}
           activeId={activeConversationId}
           onSelect={setActiveConversationId}
         />
-        <ChatPanel activeConversation={activeConversation} messages={messages} />
+        <ChatPanel
+          activeConversation={activeConversation}
+          messages={messages}
+          onNicknameChange={handleNicknameChange}
+        />
       </main>
 
     </div>

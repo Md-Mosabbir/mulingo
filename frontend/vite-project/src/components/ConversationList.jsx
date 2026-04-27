@@ -33,7 +33,7 @@ function ConversationList({ conversations, activeId, onSelect }) {
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-3">
-                <p className="truncate text-sm font-medium text-gray-200">{conversation.name}</p>
+                <p className="truncate text-sm font-medium text-gray-200">{conversation.displayName ?? conversation.name}</p>
                 <span className="shrink-0 text-xs text-[#9ca3af]">{conversation.time}</span>
               </div>
               <p className={`truncate text-xs ${statusAccent(conversation.status)}`}>

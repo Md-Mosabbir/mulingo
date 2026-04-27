@@ -6,7 +6,7 @@ function MessageBubble({ message, conversation }) {
   const [showOriginal, setShowOriginal] = useState(false);
   const hasOriginalText = Boolean(message.originalText?.trim());
   const senderInitials = conversation?.avatar ?? "A";
-  const senderName = conversation?.name ?? "Sender";
+  const senderName = conversation?.displayName ?? conversation?.name ?? "Sender";
 
   return (
     <div className={`mb-4 flex ${isUser ? "justify-end" : "justify-start"}`}>
