@@ -8,7 +8,7 @@ function ChatPanel({ activeConversation, messages }) {
       <ChatHeader name={activeConversation?.name ?? "Conversation"} />
       <div className="flex-1 overflow-y-auto px-4 py-4 md:px-6">
         {messages.map((message) => (
-          <MessageBubble key={message.id} message={message} />
+          <MessageBubble key={message.id} message={message} conversation={activeConversation} />
         ))}
       </div>
       <MessageComposer />

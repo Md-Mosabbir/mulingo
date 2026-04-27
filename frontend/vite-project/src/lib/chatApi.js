@@ -54,7 +54,8 @@ const messagesByConversation = {
     {
       id: "m1",
       sender: "agent",
-      text: "I'm a manager that's here to help",
+      text: "I don't wanna sin anymore. I have seen so much death that the feeling is close.",
+      originalText: "Hallo! sehr sehr schon fur mich! Leute Leute sehr sehr. Ich kann das nicht verstehen mew mew leute leute",
       time: "9:37 am",
     },
     {
