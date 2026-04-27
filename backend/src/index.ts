@@ -1,11 +1,16 @@
+import 'dotenv/config';
 import express, { Application, Request, Response } from 'express';
 import pool from './config/db';
+import authRoutes from './routes/authRoutes';
 
 
 const app: Application = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+
+// Routes
+app.use('/auth', authRoutes);
 
 // Boilerplate health route
 app.get('/health', (req: Request, res: Response) => {
@@ -26,3 +31,4 @@ app.get('/test-db', async (req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
