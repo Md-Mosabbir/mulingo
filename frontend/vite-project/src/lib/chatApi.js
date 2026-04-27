@@ -2,6 +2,7 @@ const conversations = [
   {
     id: "c1",
     name: "John Doe",
+    language: "English",
     preview: "How's going with your property search?",
     time: "4:45 pm",
     status: "online",
@@ -10,6 +11,7 @@ const conversations = [
   {
     id: "c2",
     name: "Travis Barker",
+    language: "German",
     preview: "... is typing",
     time: "5:38 pm",
     status: "typing",
@@ -18,6 +20,7 @@ const conversations = [
   {
     id: "c3",
     name: "Kate Rose",
+    language: "French",
     preview: "Looking forward to discussing real estate.",
     time: "5:04 pm",
     status: "seen",
@@ -26,6 +29,7 @@ const conversations = [
   {
     id: "c4",
     name: "Robert Parker",
+    language: "Spanish",
     preview: "That's fantastic news about the new listing.",
     time: "4:22 pm",
     status: "unread",
@@ -34,6 +38,7 @@ const conversations = [
   {
     id: "c5",
     name: "Emily Johnson",
+    language: "Japanese",
     preview: "Take a look at my recent real estate post...",
     time: "3:59 pm",
     status: "seen",
@@ -42,6 +47,7 @@ const conversations = [
   {
     id: "c6",
     name: "Sophia Brown",
+    language: "Arabic",
     preview: "Discover amazing properties on my page!",
     time: "3:24 pm",
     status: "seen",
