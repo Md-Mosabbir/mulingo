@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { OAuth2Client } from 'google-auth-library';
 import jwt from 'jsonwebtoken';
 import { getUserByGoogleId, createNewUser, User } from '../sql/authentication/auth';
+import { generateToken } from '../utils/jwt';
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -43,12 +44,11 @@ export const googleLogin = async (req: Request, res: Response) => {
     }
 
     // 3. Send back JWT
-    const jwtSecret = process.env.JWT_SECRET || 'fallback_secret';
-    const accessToken = jwt.sign(
-      { id: user.user_id, email: user.email, username: user.username },
-      jwtSecret,
-      { expiresIn: '7d' }
-    );
+    const accessToken = generateToken({ 
+    id: user.user_id, 
+    email: user.email, 
+    username: user.username 
+  });
 
     res.status(200).json({
       message: 'Login successful',

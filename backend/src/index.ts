@@ -3,13 +3,20 @@ import express, { Application, Request, Response } from 'express';
 import pool from './config/db';
 import authRoutes from './routes/authRoutes';
 import cors from 'cors'
+import { createServer } from 'http';
+import { initSocket } from './socket';
+
 
 
 const app: Application = express();
+
 const port = process.env.PORT || 3000;
 
+const httpServer = createServer(app)
 
 
+
+initSocket(httpServer)
 
 app.use(express.json());
 
@@ -37,8 +44,8 @@ app.get('/test-db', async (req: Request, res: Response) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+httpServer.listen(port, () => {
+  console.log(`Server is running on port ${port} with socket`);
 });
 
 
