@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { OAuth2Client } from 'google-auth-library';
-import jwt from 'jsonwebtoken';
+
 import { getUserByGoogleId, createNewUser, User } from '../sql/authentication/auth';
 import { generateToken } from '../utils/jwt';
 

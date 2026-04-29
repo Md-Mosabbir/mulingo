@@ -1,0 +1,1 @@
+export const searchUserSql = 'SELECT user_id, profile_picture, username, first_name, last_name FROM users WHERE (username LIKE ? OR first_name LIKE ? OR last_name LIKE ?) AND user_id != ?'

@@ -5,6 +5,7 @@ import authRoutes from './routes/authRoutes';
 import cors from 'cors'
 import { createServer } from 'http';
 import { initSocket } from './socket';
+import searchRoutes from './routes/searchRoutes';
 
 
 
@@ -27,6 +28,7 @@ app.use(cors({
 
 // Routes
 app.use('/auth', authRoutes);
+app.use('/search', searchRoutes)
 
 // Boilerplate health route
 app.get('/health', (req: Request, res: Response) => {

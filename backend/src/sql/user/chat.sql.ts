@@ -1,0 +1,1 @@
+export const getUserChatIds = `SELECT chat_id FROM chat_members WHERE user_id = ?`;
