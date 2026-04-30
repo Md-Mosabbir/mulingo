@@ -1,4 +1,4 @@
-import { Paperclip, SendHorizontal, Smile } from "lucide-react";
+import { SendHorizontal, Smile } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const EMOJIS = ["😀", "😂", "😍", "😎", "🤝", "🙏", "🔥", "✨", "🎉", "💬", "👍", "❤️"];
@@ -41,9 +41,7 @@ function MessageComposer() {
   return (
     <footer className="border-t border-[#1F2937] p-3 md:p-4">
       <div className="relative flex items-center gap-2 rounded-xl bg-[#1F2937] px-3 py-2 shadow-sm ring-1 ring-[#374151]">
-        <button type="button" className="rounded-full p-2 text-[#9ca3af] transition hover:bg-[#2c3648] hover:text-white" aria-label="Attach file">
-          <Paperclip className="h-5 w-5" />
-        </button>
+
         <input
           ref={inputRef}
           type="text"

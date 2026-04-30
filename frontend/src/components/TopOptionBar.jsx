@@ -1,33 +1,11 @@
-import { CirclePlus, House, LogOut, MessageCircleMore, Ticket } from "lucide-react";
-
-const actions = [
-  { id: "home", icon: House },
-  { id: "add", icon: CirclePlus },
-  { id: "messages", icon: MessageCircleMore, active: true },
-  { id: "ticket", icon: Ticket },
-];
+import { LogOut } from "lucide-react";
 
 function TopOptionBar({ user, onLogout }) {
   return (
     <header className="flex items-center justify-between py-2 px-1 bg-[#111827] ">
       <p className="font-pacifico px-4 md:px-10 text-[24px] md:text-[32px] text-white">Mulingo</p>
 
-      <nav className="flex items-center gap-2">
-        {actions.map((action) => (
-          <button
-            key={action.id}
-            type="button"
-            className={`flex h-10 w-10 items-center justify-center rounded-full text-sm transition ${
-              action.active
-                ? "bg-[#7b61ff] text-white"
-                : "bg-[#1D153D] text-[#D1D5DB] hover:bg-[#2a1f57]"
-            }`}
-            aria-label={action.id}
-          >
-            <action.icon size={18} strokeWidth={2.2} />
-          </button>
-        ))}
-      </nav>
+
 
       <div className="flex items-center gap-3 pr-2">
         {user && (
@@ -47,10 +25,11 @@ function TopOptionBar({ user, onLogout }) {
         <button
           onClick={onLogout}
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#3a2f70] bg-[#1D153D] text-[#FCA5A5] hover:bg-red-500/10 transition-colors"
+          className="flex h-10 px-4 items-center justify-center gap-2 rounded-full border border-[#3a2f70] bg-[#1D153D] text-[#FCA5A5] hover:bg-red-500/10 transition-colors text-sm font-medium"
           aria-label="Logout"
         >
-          <LogOut size={18} strokeWidth={2.2} />
+          <LogOut size={15} strokeWidth={2.2} />
+          Logout
         </button>
       </div>
     </header>

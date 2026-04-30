@@ -1,4 +1,4 @@
-import { FileText, Menu, Search, Star } from "lucide-react";
+import { Menu, Search, Star } from "lucide-react";
 
 function ChatHeader({ name, avatar, onToggleDetails, isDetailsOpen }) {
   return (
@@ -19,9 +19,7 @@ function ChatHeader({ name, avatar, onToggleDetails, isDetailsOpen }) {
         <button type="button" className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1F2937] text-white hover:bg-[#374151]">
           <Search className="h-5 w-5" />
         </button>
-        <button type="button" className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1F2937] text-white hover:bg-[#374151]">
-          <FileText className="h-5 w-5" />
-        </button>
+
         <button
           type="button"
           onClick={onToggleDetails}

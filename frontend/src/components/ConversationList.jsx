@@ -1,3 +1,5 @@
+import { Plus, Search } from "lucide-react";
+
 function statusAccent(status) {
   if (status === "typing") return "text-[#7C3AED]";
   if (status === "unread") return "text-[#7C3AED]";
@@ -14,8 +16,16 @@ function ConversationList({ conversations, activeId, onSelect }) {
           className="w-full rounded-xl border border-[#374151] bg-[#1F2937] px-3 py-2 text-sm text-white outline-none focus:border-[#7b61ff] placeholder:text-[#9CA3AF]"
         />
       </div>
-      <div className="border-b border-[#1F2937] px-4 py-3">
+      <div className="border-b border-[#1F2937] px-4 py-3 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-white">Messages</h2>
+        <div className="flex items-center gap-1">
+          <button type="button" className="flex h-9 w-9 items-center justify-center rounded-full text-[#9CA3AF] hover:bg-[#1F2937] hover:text-white transition-colors" aria-label="Search conversations">
+            <Search size={20} />
+          </button>
+          <button type="button" className="flex h-9 w-9 items-center justify-center rounded-full text-[#9CA3AF] hover:bg-[#1F2937] hover:text-white transition-colors" aria-label="New conversation">
+            <Plus size={22} />
+          </button>
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto p-2">
@@ -24,9 +34,8 @@ function ConversationList({ conversations, activeId, onSelect }) {
             key={conversation.id}
             type="button"
             onClick={() => onSelect(conversation.id)}
-            className={`mb-1 flex w-full items-start gap-3 rounded-xl px-3 py-3 text-left transition ${
-              activeId === conversation.id ? "bg-[#1F2937]" : "hover:bg-[#1F2937]"
-            }`}
+            className={`mb-1 flex w-full items-start gap-3 rounded-xl px-3 py-3 text-left transition ${activeId === conversation.id ? "bg-[#1F2937]" : "hover:bg-[#1F2937]"
+              }`}
           >
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#1D153D] text-xs text-white">
               {conversation.avatar}
