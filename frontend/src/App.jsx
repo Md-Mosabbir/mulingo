@@ -116,6 +116,31 @@ function App() {
     }));
   }
 
+  function handleStartConversation(selectedUser) {
+    const existingConv = conversations.find(
+      (c) => c.name === selectedUser.username || c.displayName === selectedUser.username
+    );
+
+    if (existingConv) {
+      setActiveConversationId(existingConv.id);
+      return;
+    }
+
+    const newConversation = {
+      id: `c_${Date.now()}`,
+      name: selectedUser.username,
+      language: "English",
+      preview: "Start a new conversation",
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      status: "online",
+      avatar: selectedUser.username ? selectedUser.username.substring(0, 2).toUpperCase() : "?",
+      sharedItems: [],
+    };
+
+    setConversations((prev) => [newConversation, ...prev]);
+    setActiveConversationId(newConversation.id);
+  }
+
   return (
     <Routes>
       <Route
@@ -136,6 +161,7 @@ function App() {
                   conversations={displayConversations}
                   activeId={activeConversationId}
                   onSelect={setActiveConversationId}
+                  onStartConversation={handleStartConversation}
                 />
                 <ChatPanel
                   activeConversation={activeConversation}
