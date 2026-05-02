@@ -60,6 +60,44 @@ export async function updateMyProfile(req: Request, res: Response) {
   }
 }
 
+export async function updateMyOwnProfile(req: Request, res: Response) {
+  try {
+    const authUserId = Number((req as any).user?.id);
+    if (!Number.isFinite(authUserId)) return fail(res, 'Unauthorized', 401);
+
+    const data = matchedData(req, { locations: ['body'] }) as {
+      display_name?: string;
+      preferred_language_code?: string;
+      preferred_language_id?: number;
+      avatar_url?: string;
+    };
+
+    const firstName = typeof data.display_name === 'string' ? data.display_name.trim() : null;
+    const profilePicture = typeof data.avatar_url === 'string' ? data.avatar_url.trim() : null;
+
+    let preferredLanguageId: number | null = null;
+    if (typeof data.preferred_language_id === 'number') {
+      preferredLanguageId = data.preferred_language_id;
+    } else if (typeof data.preferred_language_code === 'string') {
+      preferredLanguageId = await getLanguageIdByCode(data.preferred_language_code.trim());
+      if (!preferredLanguageId) return fail(res, 'Unknown preferred language code', 400);
+    }
+
+    await updateUserProfile({
+      userId: authUserId,
+      firstName,
+      profilePicture,
+      preferredLanguageId,
+    });
+
+    const updated = await getUserById(authUserId);
+    return ok(res, updated);
+  } catch (err) {
+    console.error(err);
+    return fail(res, 'Internal server error', 500);
+  }
+}
+
 export async function listOrSearchUsers(req: Request, res: Response) {
   try {
     const authUserId = Number((req as any).user?.id);

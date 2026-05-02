@@ -1,4 +1,26 @@
-# React + Vite
+# Mulingo frontend
+
+React + Vite UI for the multilingual chat backend (`/rooms`, `/groups`, Socket.io).
+
+## Environment
+
+Copy `.env.example` to `.env` and set:
+
+- `VITE_API_BASE_URL` — e.g. `http://localhost:3000` (must match backend + Socket.io origin)
+- `VITE_GOOGLE_CLIENT_ID` — Google OAuth Web client ID (same as backend `GOOGLE_CLIENT_ID` audience)
+
+## Scripts
+
+```bash
+npm install
+npm run dev
+npm run build
+npm run lint
+```
+
+---
+
+## React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { body, param, query } from 'express-validator';
-import { getUserProfile, listOrSearchUsers, updateMyProfile } from '../controllers/userController';
+import { getUserProfile, listOrSearchUsers, updateMyOwnProfile, updateMyProfile } from '../controllers/userController';
 import { authenticateJWT } from '../middleware/auth';
 import { validate } from '../middleware/validate';
 import { searchLimiter } from '../middleware/security';
@@ -24,6 +24,17 @@ router.get(
   param('id').isInt({ min: 1 }).withMessage('id must be a positive integer'),
   validate,
   getUserProfile,
+);
+
+router.put(
+  '/me',
+  authenticateJWT,
+  body('display_name').optional().isString().isLength({ min: 1, max: 100 }).withMessage('display_name must be 1-100 chars'),
+  body('preferred_language_code').optional().isString().isLength({ min: 2, max: 10 }).withMessage('preferred_language_code must be 2-10 chars'),
+  body('preferred_language_id').optional().isInt({ min: 1 }).withMessage('preferred_language_id must be a positive integer'),
+  body('avatar_url').optional().isString().isLength({ min: 1, max: 500 }).withMessage('avatar_url must be 1-500 chars'),
+  validate,
+  updateMyOwnProfile,
 );
 
 router.put(

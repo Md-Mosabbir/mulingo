@@ -50,3 +50,17 @@ body {
 .chat-scrollbar::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #9d88ff 0%, #7a5cf7 100%);
 }
+
+@keyframes mulingo-soft-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+
+.animate-soft-pulse {
+  animation: mulingo-soft-pulse 2.5s ease-in-out infinite;
+}

@@ -34,7 +34,7 @@ export async function translateText({ text, from, to }: TranslateArgs): Promise<
   const userPrompt = [
     `Translate the following text from "${from}" to "${to}".`,
     'Preserve meaning, names, punctuation, and tone.',
-    'If input is ambiguous, choose the most likely direct translation.',
+    'Do not translate emojis.',
     '',
     'TEXT:',
     text,

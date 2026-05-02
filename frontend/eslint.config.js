@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'vite-project', '**/vite-project/**']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [
@@ -16,6 +16,11 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
+    },
+    rules: {
+      // React 19 / Compiler extras are noisy for data-fetch effects and controlled forms; keep recommended hooks safety elsewhere.
+      'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/preserve-manual-memoization': 'off',
     },
   },
 ])
