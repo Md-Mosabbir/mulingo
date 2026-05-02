@@ -154,8 +154,8 @@ function App() {
         element={
           token ? (
             <div className="flex flex-col h-screen overflow-hidden bg-[#0B1120] pb-2 text-white font-inter">
-              <TopOptionBar user={user} onLogout={handleLogout} />
 
+              <TopOptionBar user={user} onLogout={handleLogout} />
               <main className="flex-1 min-h-0 grid grid-cols-1 gap-2 w-full px-2 md:grid-cols-[1fr_3fr] mt-2">
                 <ConversationList
                   conversations={displayConversations}

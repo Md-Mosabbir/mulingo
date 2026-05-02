@@ -6,7 +6,7 @@ import cors from 'cors'
 import { createServer } from 'http';
 import { initSocket } from './socket';
 import searchRoutes from './routes/searchRoutes';
-
+import chatRoutes from "./routes/chatRoutes"
 
 
 const app: Application = express();
@@ -29,6 +29,7 @@ app.use(cors({
 // Routes
 app.use('/auth', authRoutes);
 app.use('/search', searchRoutes)
+app.use("/chat", chatRoutes)
 
 // Boilerplate health route
 app.get('/health', (req: Request, res: Response) => {
