@@ -98,6 +98,7 @@ async function mapDmRow(roomRow, myUserId) {
     preview: "Open to chat across languages",
     timeLabel: formatListTime(roomRow.updated_at),
     status: "online",
+    unread: false,
     avatar: (title || "?").slice(0, 2).toUpperCase(),
     avatarUrl: other?.profile_picture || null,
     updatedAt: roomRow.updated_at,
@@ -120,6 +121,7 @@ async function mapGroupRow(groupRow, myUserId) {
     preview: "Group conversation",
     timeLabel: formatListTime(groupRow.updated_at),
     status: "seen",
+    unread: false,
     avatar: (detail.chat_name || "GR").slice(0, 2).toUpperCase(),
     avatarUrl: detail.chat_image || null,
     updatedAt: groupRow.updated_at,
@@ -287,19 +289,25 @@ export default function App() {
 
     function onRecv(p) {
       const myId = profile.user_id;
+      const current = activeChatRef.current;
+      const isOpen = Boolean(current?.chatId) && Number(current.chatId) === Number(p.chatId);
+      const nextUpdatedAt = p.sentAt || new Date().toISOString();
+
       setConversations((prev) =>
-        prev.map((c) =>
-          c.chatId === p.chatId
-            ? {
-                ...c,
-                preview: String(p.text || "").slice(0, 140),
-                timeLabel: formatListTime(new Date().toISOString()),
-              }
-            : c,
-        ),
+        prev.map((c) => {
+          if (Number(c.chatId) !== Number(p.chatId)) return c;
+          const unread = !isOpen;
+          return {
+            ...c,
+            preview: String(p.text || "").slice(0, 140),
+            timeLabel: formatListTime(nextUpdatedAt),
+            updatedAt: nextUpdatedAt,
+            unread,
+            status: unread ? "unread" : c.status,
+          };
+        }),
       );
 
-      const current = activeChatRef.current;
       if (!current?.chatId || current.chatId !== p.chatId) return;
 
       setMessages((prev) => {
@@ -646,13 +654,19 @@ export default function App() {
   }, [conversations, nicknamesByConversation]);
 
   const sortedDisplayConversations = useMemo(() => {
-    const starred = (c) => favorites.has(c.key);
     return [...displayConversations].sort((a, b) => {
-      const fs = Number(starred(b)) - Number(starred(a));
-      if (fs !== 0) return fs;
       return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
     });
-  }, [displayConversations, favorites]);
+  }, [displayConversations]);
+
+  const handleSelectConversation = useCallback((kind, chatId) => {
+    setConversations((prev) =>
+      prev.map((c) =>
+        c.kind === kind && Number(c.chatId) === Number(chatId) ? { ...c, unread: false, status: "seen" } : c,
+      ),
+    );
+    setActiveChat({ kind, chatId });
+  }, []);
 
   const showMobileChat = isMobile && Boolean(activeChat?.chatId);
 
@@ -720,7 +734,7 @@ export default function App() {
                       conversations={sortedDisplayConversations}
                       activeKind={activeChat.kind}
                       activeChatId={activeChat.chatId}
-                      onSelect={(kind, chatId) => setActiveChat({ kind, chatId })}
+                      onSelect={handleSelectConversation}
                       onStartDm={handleStartDm}
                       loading={convLoading}
                     />

@@ -130,12 +130,25 @@ export default function ConversationList({
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-3 mb-1">
-                        <p className="truncate text-[15px] font-semibold text-gray-200">
+                        <p
+                          className={[
+                            "truncate text-[15px] text-gray-200",
+                            conversation.unread && !isActive(conversation) ? "font-extrabold text-white" : "font-semibold",
+                          ].join(" ")}
+                        >
                           {conversation.displayName ?? conversation.title}
                         </p>
                         <span className="shrink-0 text-xs font-medium text-[#9ca3af]">{conversation.timeLabel}</span>
                       </div>
-                      <p className={`truncate text-[13px] ${statusAccent(conversation.status)}`}>{conversation.preview}</p>
+                      <p
+                        className={[
+                          "truncate text-[13px]",
+                          statusAccent(conversation.status),
+                          conversation.unread && !isActive(conversation) ? "font-bold text-white" : "",
+                        ].join(" ")}
+                      >
+                        {conversation.preview}
+                      </p>
                     </div>
                   </button>
                 </motion.div>
