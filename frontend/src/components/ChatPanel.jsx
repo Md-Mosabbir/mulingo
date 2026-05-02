@@ -55,6 +55,7 @@ export default function ChatPanel({
   currentUserId,
   chatMeta,
   subtitle,
+  isLive,
   sendError,
   onDismissError,
   onNicknameChange,
@@ -158,6 +159,7 @@ export default function ChatPanel({
         avatar={activeConversation?.avatarUrl ? null : activeConversation?.avatar}
         avatarUrl={activeConversation?.avatarUrl}
         subtitle={subtitle}
+        isLive={isLive}
         messageSearch={messageSearch}
         onMessageSearchChange={onMessageSearchChange}
         starred={isFavorite}

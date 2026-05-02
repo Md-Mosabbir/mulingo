@@ -30,7 +30,7 @@ export default function MessageBubble({ message, conversation, isGroup, senderDi
             ].join(" ")}
           >
             {!isUser && (
-              <div className="absolute left-4 top-4 flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border-2 border-white/60 bg-[#d7d7d7] text-sm font-semibold text-[#2f2f2f]">
+              <div className="absolute left-3 top-3 flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border-2 border-white/60 bg-[#d7d7d7] text-sm font-semibold text-[#2f2f2f]">
                 {message.avatarUrl ? (
                   <img src={message.avatarUrl} alt="" className="h-full w-full object-cover" />
                 ) : (

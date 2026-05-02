@@ -5,6 +5,7 @@ export default function ChatHeader({
   avatar,
   avatarUrl,
   subtitle,
+  isLive,
   messageSearch,
   onMessageSearchChange,
   starred,
@@ -14,6 +15,11 @@ export default function ChatHeader({
   onToggleDetails,
   isDetailsOpen,
 }) {
+  const liveParts =
+    isLive && typeof subtitle === "string" && subtitle.startsWith("Live · ")
+      ? { left: "Live", right: subtitle.replace(/^Live ·\s*/, "· ") }
+      : null;
+
   return (
     <header className="flex flex-col gap-3 border-b border-[#1F2937] px-4 py-3 md:px-6 md:flex-row md:items-center md:justify-between">
       <div className="flex items-center gap-3 min-w-0">
@@ -32,7 +38,16 @@ export default function ChatHeader({
         </div>
         <div className="min-w-0">
           <h3 className="truncate text-base font-semibold text-white">{name}</h3>
-          <p className="truncate text-xs text-[#9CA3AF]">{subtitle || "—"}</p>
+          <p className="truncate text-xs">
+            {liveParts ? (
+              <>
+                <span className="text-emerald-400 font-semibold">{liveParts.left}</span>
+                <span className="text-[#9CA3AF]">{` ${liveParts.right}`}</span>
+              </>
+            ) : (
+              <span className="text-[#9CA3AF]">{subtitle || "—"}</span>
+            )}
+          </p>
         </div>
       </div>
 

@@ -570,6 +570,7 @@ export default function App() {
   }, [typingMap, activeChat.chatId, chatMeta]);
 
   const subtitle = typingLabel || (socketConnected ? "Live · messages translated for you" : "Connecting…");
+  const isLive = !typingLabel && socketConnected;
 
   const isMutedSelf = useMemo(() => {
     if (!chatMeta || !profile?.user_id) return false;
@@ -738,6 +739,7 @@ export default function App() {
                       currentUserId={profile?.user_id}
                       chatMeta={chatMeta}
                       subtitle={subtitle}
+                      isLive={isLive}
                       sendError={sendError}
                       onDismissError={() => setSendError("")}
                       onNicknameChange={handleNicknameChange}
