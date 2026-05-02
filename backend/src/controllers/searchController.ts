@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
-import pool from "../config/db"
-import { searchUserSql } from "../sql/user/search.sql"
 import { searchUsers } from "../sql/user/search"
+import { fail, ok } from "../utils/response"
 
 
 export const searchUser = async (req: Request, res: Response) => {
@@ -10,13 +9,10 @@ export const searchUser = async (req: Request, res: Response) => {
         const username = req.query.username as string
   
 
-        if(!username) return res.status(400).json({message: "Username is required"})
+        if(!username) return fail(res, "Username is required", 400)
 
         const users = await searchUsers(username, (req as any).user.id)
-        console.log((req as any).user)
-
-
-        res.json(users)
+        return ok(res, users)
         
 
 
@@ -24,6 +20,6 @@ export const searchUser = async (req: Request, res: Response) => {
 
     } catch(error){
         console.log(error)
-        res.status(500).json({message: "Internal server error"})
+        return fail(res, "Internal server error", 500)
     }
 }

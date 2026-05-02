@@ -26,7 +26,7 @@ export const initSocket = (httpServer: HttpServer) => {
       const decoded = verifyToken(token);
       (socket as any).user = decoded; // Attach user info to the socket
       next();
-    } catch (err) {
+    } catch {
       next(new Error("Authentication error: Invalid token"));
     }
   });

@@ -3,10 +3,16 @@ import express, { Application, Request, Response } from 'express';
 import pool from './config/db';
 import authRoutes from './routes/authRoutes';
 import cors from 'cors'
+import helmet from 'helmet';
 import { createServer } from 'http';
 import { initSocket } from './socket';
 import searchRoutes from './routes/searchRoutes';
 import chatRoutes from "./routes/chatRoutes"
+import userRoutes from './routes/userRoutes';
+import roomRoutes from './routes/roomRoutes';
+import groupRoutes from './routes/groupRoutes';
+import llmRoutes from './routes/llmRoutes';
+import { globalApiLimiter } from './middleware/security';
 
 
 const app: Application = express();
@@ -19,7 +25,9 @@ const httpServer = createServer(app)
 
 initSocket(httpServer)
 
+app.use(helmet());
 app.use(express.json());
+app.use(globalApiLimiter);
 
 app.use(cors({
   origin: 'http://localhost:5173', // Allow your React app
@@ -30,6 +38,10 @@ app.use(cors({
 app.use('/auth', authRoutes);
 app.use('/search', searchRoutes)
 app.use("/chat", chatRoutes)
+app.use('/users', userRoutes);
+app.use('/rooms', roomRoutes);
+app.use('/groups', groupRoutes);
+app.use('/llm', llmRoutes);
 
 // Boilerplate health route
 app.get('/health', (req: Request, res: Response) => {

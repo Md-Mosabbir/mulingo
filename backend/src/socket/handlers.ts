@@ -1,11 +1,18 @@
 import { Server, Socket } from 'socket.io';
 import { getUserChatIds } from '../sql/user/chat';
+import { getLanguageCodeById } from '../sql/language';
+import { translateText } from '../services/translation';
+import { upsertMessageTranslation } from '../sql/chat/messages';
+import { getChatMembersForRealtime, getMyChatMembership, insertTextMessage, updateLastReadMessage } from '../sql/chat/realtime';
 
 export const registerSocketHandlers = (io: Server, socket: Socket) => {
   const user = (socket as any).user;
   const userId = user.id;
 
   console.log(`User ${userId} (${user.username}) connected`);
+
+  // Personal room for per-user emits (translations differ per recipient).
+  socket.join(`user_${userId}`);
 
   // 1. JOIN ROOMS
   // When the user connects, find all chat_ids they belong to in the DB
@@ -27,21 +34,144 @@ export const registerSocketHandlers = (io: Server, socket: Socket) => {
 
   joinRooms();
 
-  // 2. HANDLE MESSAGE EVENT (Targeting the Chat ID)
+  socket.on('join_room', async (data) => {
+    try {
+      const chatId = Number(data?.chatId);
+      if (!Number.isFinite(chatId) || chatId <= 0) return;
+
+      const membership = await getMyChatMembership(chatId, userId);
+      if (!membership) return;
+
+      socket.join(`chat_${chatId}`);
+    } catch (err) {
+      console.error('join_room error', err);
+    }
+  });
+
+  socket.on('leave_room', async (data) => {
+    try {
+      const chatId = Number(data?.chatId);
+      if (!Number.isFinite(chatId) || chatId <= 0) return;
+      socket.leave(`chat_${chatId}`);
+    } catch (err) {
+      console.error('leave_room error', err);
+    }
+  });
+
+  socket.on('typing', async (data) => {
+    try {
+      const chatId = Number(data?.chatId);
+      const isTyping = Boolean(data?.isTyping);
+      if (!Number.isFinite(chatId) || chatId <= 0) return;
+
+      const membership = await getMyChatMembership(chatId, userId);
+      if (!membership) return;
+
+      socket.to(`chat_${chatId}`).emit('typing', { chatId, userId, isTyping });
+    } catch (err) {
+      console.error('typing error', err);
+    }
+  });
+
+  socket.on('read_receipt', async (data) => {
+    try {
+      const chatId = Number(data?.chatId);
+      const messageId = Number(data?.messageId);
+      if (!Number.isFinite(chatId) || chatId <= 0) return;
+      if (!Number.isFinite(messageId) || messageId <= 0) return;
+
+      const membership = await getMyChatMembership(chatId, userId);
+      if (!membership) return;
+
+      await updateLastReadMessage({ chatId, userId, messageId });
+      io.to(`chat_${chatId}`).emit('read_receipt', { chatId, userId, messageId });
+    } catch (err) {
+      console.error('read_receipt error', err);
+    }
+  });
+
+  // send_message event:
+  // - persist original message + source language
+  // - translate per recipient preferred language
+  // - emit per-recipient via user_<id> room
   socket.on('send_message', async (data) => {
-    const { chatId, text, langId } = data;
+    try {
+      const chatId = Number(data?.chatId);
+      const text = typeof data?.text === 'string' ? data.text.trim() : '';
+      const sourceLanguageId = Number(data?.langId);
 
-    // Logic: 
-    // 1. Save to DB (Persistence) - we'll add this function soon
-    // 2. Broadcast to everyone in that specific chat room
-    io.to(`chat_${chatId}`).emit('receive_message', {
-      chatId,
-      senderId: userId,
-      text,
-      sentAt: new Date()
-    });
+      if (!Number.isFinite(chatId) || chatId <= 0) {
+        return socket.emit('send_message_error', { success: false, message: 'Invalid chatId' });
+      }
+      if (!text) {
+        return socket.emit('send_message_error', { success: false, message: 'Message text is required' });
+      }
+      if (!Number.isFinite(sourceLanguageId) || sourceLanguageId <= 0) {
+        return socket.emit('send_message_error', { success: false, message: 'Invalid langId' });
+      }
 
-    console.log(`✉️ Message from ${userId} in Chat ${chatId}: ${text}`);
+      const membership = await getMyChatMembership(chatId, userId);
+      if (!membership) {
+        return socket.emit('send_message_error', { success: false, message: 'Forbidden' });
+      }
+      if (membership.is_muted) {
+        return socket.emit('send_message_error', { success: false, message: 'You are muted in this chat' });
+      }
+
+      const messageId = await insertTextMessage({
+        chatId,
+        senderId: userId,
+        sourceLanguageId,
+        text,
+      });
+
+      const sentAt = new Date().toISOString();
+      const sourceCode = await getLanguageCodeById(sourceLanguageId);
+      if (!sourceCode) {
+        return socket.emit('send_message_error', { success: false, message: 'Unknown source language' });
+      }
+
+      const members = await getChatMembersForRealtime(chatId);
+
+      await Promise.all(
+        members.map(async (m) => {
+          const targetLangId = Number(m.preferred_language_id);
+          const targetCode = await getLanguageCodeById(targetLangId);
+          if (!targetCode) return;
+
+          let translated = text;
+          if (targetLangId !== sourceLanguageId) {
+            try {
+              translated = await translateText({ text, from: sourceCode, to: targetCode });
+            } catch {
+              translated = text;
+            }
+          }
+
+          // Cache translation for history fetches.
+          await upsertMessageTranslation({
+            messageId,
+            targetLanguageId: targetLangId,
+            translatedText: translated,
+          });
+
+          io.to(`user_${m.user_id}`).emit('receive_message', {
+            chatId,
+            messageId,
+            senderId: userId,
+            sourceLanguageId,
+            originalText: text,
+            text: translated,
+            sentAt,
+          });
+        }),
+      );
+
+      console.log(`✉️ Message ${messageId} from ${userId} in Chat ${chatId}`);
+    } catch (err) {
+      console.error('send_message error', err);
+      return socket.emit('send_message_error', { success: false, message: 'Internal server error' });
+    }
   });
 
   // 3. CLEANUP
