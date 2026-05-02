@@ -17,15 +17,15 @@ export default function UserPickerModal({ open, onClose, onSelectUser, title = "
   }, [open]);
 
   useEffect(() => {
-    if (!open || !searchQuery.trim()) {
-      setSearchResults([]);
+    if (!open) {
       return;
     }
 
     const t = setTimeout(async () => {
       setIsSearching(true);
       try {
-        const rows = await searchUsersList(searchQuery.trim(), 20);
+        const query = searchQuery.trim() || "m";
+        const rows = await searchUsersList(query, 20);
         setSearchResults(Array.isArray(rows) ? rows : []);
       } catch (e) {
         console.error(e);
@@ -126,7 +126,7 @@ export default function UserPickerModal({ open, onClose, onSelectUser, title = "
                 <div className="text-center py-8 text-[#9CA3AF] text-sm">No users found for "{searchQuery}"</div>
               ) : (
                 <div className="text-center py-8 text-[#9CA3AF] text-sm">
-                  Type at least one character to search users you can message.
+                  No suggested users found. Start typing to search by username.
                 </div>
               )}
             </div>
