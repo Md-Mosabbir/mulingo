@@ -10,6 +10,8 @@ Welcome to the **Mulingo** monorepo! This repository contains the source code fo
 - **Tooling**: ESLint (v9 Flat Config), Prettier, Nodemon, TypeScript Compiler (tsc)
 - **Infrastructure**: Docker & Docker Compose (Multi-stage Dev & Prod Environments)
 
+For a fully free cloud deployment (Vercel + Render + free MySQL), see `DEPLOYMENT_FREE.md`.
+
 ---
 
 ## Directory Structure
