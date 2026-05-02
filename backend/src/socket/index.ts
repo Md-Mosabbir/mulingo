@@ -4,9 +4,14 @@ import { registerSocketHandlers } from './handlers';
 import { verifyToken } from '../utils/jwt'; // Use your new utility!
 
 export const initSocket = (httpServer: HttpServer) => {
+  const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
   const io = new Server(httpServer, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: allowedOrigins,
       methods: ["GET", "POST"]
     }
   });

@@ -35,10 +35,18 @@ Create `backend/.env`:
 
 ```env
 PORT=3000
+NODE_ENV=production
+CORS_ORIGIN=http://localhost:5173
+
+# Preferred for cloud providers:
+# DATABASE_URL=mysql://USER:PASSWORD@HOST:PORT/DB_NAME
+
 DB_HOST=localhost
+DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=
 DB_NAME=mulingo
+DB_SSL=false
 
 GOOGLE_CLIENT_ID=your_google_client_id
 JWT_SECRET=your_jwt_secret

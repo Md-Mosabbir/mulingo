@@ -19,6 +19,10 @@ import reportRoutes from './routes/reportRoutes';
 const app: Application = express();
 
 const port = process.env.PORT || 3000;
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 const httpServer = createServer(app)
 
@@ -26,12 +30,20 @@ const httpServer = createServer(app)
 
 initSocket(httpServer)
 
+app.set('trust proxy', 1);
 app.use(helmet());
 app.use(express.json());
 app.use(globalApiLimiter);
 
 app.use(cors({
-  origin: 'http://localhost:5173', // Allow your React app
+  origin: (origin, callback) => {
+    // Allow browserless tools and same-origin requests without an Origin header.
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
 
