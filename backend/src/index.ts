@@ -13,6 +13,7 @@ import roomRoutes from './routes/roomRoutes';
 import groupRoutes from './routes/groupRoutes';
 import llmRoutes from './routes/llmRoutes';
 import { globalApiLimiter } from './middleware/security';
+import reportRoutes from './routes/reportRoutes';
 
 
 const app: Application = express();
@@ -42,6 +43,7 @@ app.use('/users', userRoutes);
 app.use('/rooms', roomRoutes);
 app.use('/groups', groupRoutes);
 app.use('/llm', llmRoutes);
+app.use('/reports', reportRoutes);
 
 // Boilerplate health route
 app.get('/health', (req: Request, res: Response) => {

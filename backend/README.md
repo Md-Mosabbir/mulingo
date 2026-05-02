@@ -59,6 +59,30 @@ npm install
 npm run dev:backend
 ```
 
+## Database Setup (`mysql -u root`)
+
+From project root, open MySQL shell:
+
+```bash
+mysql -u root -p
+```
+
+Then run:
+
+```sql
+CREATE DATABASE IF NOT EXISTS mulingo;
+USE mulingo;
+SOURCE backend/src/config/schema.sql;
+SOURCE backend/sql/submission_extras.sql;
+```
+
+Verify view creation (required for reports endpoint):
+
+```sql
+SHOW FULL TABLES WHERE Table_type = 'VIEW';
+SELECT * FROM v_user_chat_overview LIMIT 5;
+```
+
 Backend health check:
 
 ```text
@@ -158,6 +182,17 @@ Base URL: `http://localhost:3000`
   "to": "bn"
 }
 ```
+
+### Reports Routes (Rubric SQL Evidence)
+
+- `GET /reports/chats-in-subquery?limit=50`
+  - Multi-row subquery with `IN`
+- `GET /reports/chats/:chatId/distinct-senders`
+  - `DISTINCT` usage
+- `GET /reports/chats/:chatId/aggregate-stats?minCount=1`
+  - `COUNT/SUM/AVG/MIN/MAX` + `GROUP BY` + `HAVING`
+- `GET /reports/my-chat-overview-view?limit=50`
+  - SQL `VIEW` usage (`v_user_chat_overview`)
 
   - Response:
 
