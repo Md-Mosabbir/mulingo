@@ -96,9 +96,17 @@ CREATE TABLE `message_attachments` (
   `file_url` varchar(500) NOT NULL,
   `file_type` varchar(100),
   `file_size` int,
-  `uploaded_at` datetime DEFAULT (CURRENT_TIMESTAMP),
-  FOREIGN KEY (`message_id`) REFERENCES `messages` (`message_id`) ON DELETE CASCADE
-);
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`message_id`) REFERENCES `messages`(`message_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `push_subscriptions` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT NOT NULL,
+  `subscription_json` TEXT NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 4. SEED DATA (The "Wink Wink" part)
 INSERT INTO languages (language_code, language_name, native_name, direction) VALUES 

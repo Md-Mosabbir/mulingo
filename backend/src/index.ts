@@ -14,9 +14,19 @@ import groupRoutes from './routes/groupRoutes';
 import llmRoutes from './routes/llmRoutes';
 import { globalApiLimiter } from './middleware/security';
 import reportRoutes from './routes/reportRoutes';
+import notificationRoutes from './routes/notificationRoutes';
+import webpush from 'web-push';
 
 
 const app: Application = express();
+
+const vapidPublic = process.env.VAPID_PUBLIC_KEY || '';
+const vapidPrivate = process.env.VAPID_PRIVATE_KEY || '';
+const vapidSubject = process.env.VAPID_SUBJECT || 'mailto:example@example.com';
+
+if (vapidPublic && vapidPrivate) {
+  webpush.setVapidDetails(vapidSubject, vapidPublic, vapidPrivate);
+}
 
 const port = process.env.PORT || 3000;
 const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
@@ -56,6 +66,7 @@ app.use('/rooms', roomRoutes);
 app.use('/groups', groupRoutes);
 app.use('/llm', llmRoutes);
 app.use('/reports', reportRoutes);
+app.use('/notifications', notificationRoutes);
 
 // Boilerplate health route
 app.get('/health', (req: Request, res: Response) => {

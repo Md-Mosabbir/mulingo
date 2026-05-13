@@ -4,6 +4,7 @@ import { getLanguageCodeById } from '../sql/language';
 import { translateText } from '../services/translation';
 import { upsertMessageTranslation } from '../sql/chat/messages';
 import { getChatMembersForRealtime, getMyChatMembership, insertTextMessage, updateLastReadMessage } from '../sql/chat/realtime';
+import { sendPushNotification } from '../services/notification';
 
 export const registerSocketHandlers = (io: Server, socket: Socket) => {
   const user = (socket as any).user;
@@ -155,15 +156,21 @@ export const registerSocketHandlers = (io: Server, socket: Socket) => {
             translatedText: translated,
           });
 
-          io.to(`user_${m.user_id}`).emit('receive_message', {
-            chatId,
-            messageId,
-            senderId: userId,
-            sourceLanguageId,
-            originalText: text,
-            text: translated,
             sentAt,
           });
+
+          // 4. Send Web Push Notification
+          if (Number(m.user_id) !== userId) {
+            sendPushNotification(m.user_id, {
+              title: `New message from ${user.username}`,
+              body: translated,
+              icon: '/icons/icon-192x192.png',
+              data: {
+                chatId,
+                url: `/`
+              }
+            }).catch(err => console.error('Push notification error:', err));
+          }
         }),
       );
 
