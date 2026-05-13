@@ -22,6 +22,8 @@ import { disconnectChatSocket, getChatSocket } from "./socket/chatSocket";
 import { getUserIdFromToken } from "./utils/jwt";
 import { formatListTime, formatMessageTime } from "./utils/format";
 import { languageLabelById } from "./constants/languages";
+import { usePWA } from "./hooks/usePWA";
+import PWAInstallDialog from "./components/PWAInstallDialog";
 
 const FAV_KEY = "mulingo:favorites";
 
@@ -138,6 +140,7 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const isMobile = useIsMobile();
+  const { isInstallable, installApp, notificationPermission, requestNotificationPermission } = usePWA();
 
   const [conversations, setConversations] = useState([]);
   const [convLoading, setConvLoading] = useState(false);
@@ -773,6 +776,13 @@ export default function App() {
                     />
                   )}
                 </div>
+
+                <PWAInstallDialog
+                  isInstallable={isInstallable}
+                  installApp={installApp}
+                  notificationPermission={notificationPermission}
+                  requestNotificationPermission={requestNotificationPermission}
+                />
               </motion.main>
             </div>
           ) : (
