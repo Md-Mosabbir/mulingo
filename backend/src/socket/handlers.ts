@@ -155,7 +155,13 @@ export const registerSocketHandlers = (io: Server, socket: Socket) => {
             targetLanguageId: targetLangId,
             translatedText: translated,
           });
-
+          io.to(`user_${m.user_id}`).emit('receive_message', {
+            chatId,
+            messageId,
+            senderId: userId,
+            sourceLanguageId,
+            originalText: text,
+            text: translated,
             sentAt,
           });
 
